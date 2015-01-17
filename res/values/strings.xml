@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">EngLearningGame</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_label_account">账号</string>
+    <string name="login_label_password">密码</string>
+    <string name="login_label_signin">登 录</string>  
+    <string name="login_status_logging_in">登录中&#8230;</string>
+    <string name="login_account_hint">Email</string>
+    <string name="login_register_link">没有账号？<a href="#" mce_href="#">注册</a></string>
+    <string name="main_startgame">经典模式</string>
+    <string name="main_logout">退出</string>
+    <string name="main_lv">Lv0</string>
+    <string name="main_saying_title">每日一句：</string>
+    <string name="main_saying_ex">every day is a new day.</string>
+	<string name="register_label_account">注册邮箱</string>
+	<string name="register_label_name">昵称</string>
+	<string name="register_label_password">密码</string>
+	<string name="register_label_conform">确认密码</string>
+	<string name="register_button_conform">注册</string>
+	<string name="portait">头像</string>
+	<string name="select_portrait">从手机相册中选择</string>
+	<string name="cancel_portrait">取消</string>
+	<string name="mission_one">第1关</string>
+	<string name="mission_two">第2关</string>
+	<string name="mission_three">第3关</string>
+	<string name="mission_four">第4关</string>
+	<string name="mission_five">第5关</string>
+	<string name="mission_six">第6关</string>
+	<string name="mission_seven">第7关</string>
+	<string name="mission_eight">第8关</string>
+	<string name="mission_nine">第9关</string>
+	<string name="mission_ten">第10关</string>
+	<string name="right">Right!</string>
+	<string name="wrong">Wrong!</string>
+	<string name="return_menu">返回目录</string>
+	<string name="next">下一关</string>
+	<string name="restart">再来一次</string>
+</resources>

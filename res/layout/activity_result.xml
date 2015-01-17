@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_login"
+     >   
+    <TextView 
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/right"
+        android:textSize="50sp"
+        android:layout_marginTop="80dp"
+       android:layout_centerHorizontal="true"/>
+    
+    <Button
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/return_menu"
+        android:layout_below="@id/result"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp" />
+    
+    <Button
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:layout_below="@id/result"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginRight="10dp" />      
+    
+
+</RelativeLayout>

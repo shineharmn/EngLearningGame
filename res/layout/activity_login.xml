@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/background_login">
+    
+    <RelativeLayout 
+        android:id="@+id/login_div" 
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:padding="15dp" 
+        android:layout_margin="15dp" 
+        android:background="@drawable/background_login_div_bg" 
+        >
+        <TextView
+            android:id="@+id/login_account_input" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_alignParentTop="true" 
+            android:layout_marginTop="5dp" 
+            android:text="@string/login_label_account" 
+            style="@style/normalText" 
+             />
+        <EditText
+            android:id="@+id/account_edit" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:hint="@string/login_account_hint" 
+            android:layout_below="@id/login_account_input" 
+            android:singleLine="true" 
+            android:inputType="text" 
+             />
+        
+        <TextView 
+            android:id="@+id/login_password_input" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_below="@id/account_edit" 
+            android:layout_marginTop="3dp"  
+            android:text="@string/login_label_password" 
+            style="@style/normalText"
+            />
+        <EditText
+            android:id="@+id/password_edit" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:layout_below="@id/login_password_input" 
+            
+            android:singleLine="true"  
+            android:inputType="textPassword"  
+             />
+         <Button  
+            android:id="@+id/signin_button"  
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"  
+            android:layout_below="@id/password_edit"  
+            android:layout_alignRight="@id/password_edit"  
+            android:text="@string/login_label_signin"  
+          
+    />  
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:id="@+id/register_div"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="17dp" 
+        >
+        <TextView 
+            android:id="@+id/register_text"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:text="@string/login_register_link"
+            style="@style/normalText"
+            />
+    </RelativeLayout>
+    
+</LinearLayout>
