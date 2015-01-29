@@ -92,18 +92,25 @@
         android:id="@+id/main_button_div"
         android:layout_width="wrap_content"
         android:layout_height="71dp"
-        android:layout_marginLeft="-130dp"
+        android:layout_marginLeft="-250dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="370dp"
         android:padding="15dp" >
-
+        <Button
+            android:id="@+id/button_classicalmodel"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="5dp"
+            android:text="@string/main_classicalmodel" />
         <Button
             android:id="@+id/button_startgame"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="5dp"
             android:text="@string/main_startgame" />
     </RelativeLayout>

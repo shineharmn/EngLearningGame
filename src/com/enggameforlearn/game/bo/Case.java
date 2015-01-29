@@ -14,12 +14,17 @@ public class Case {
 	/**
 	 * 选项
 	 */
-	private ArrayList<AbstractOption> options;
+	private ArrayList<String> options;
+	
+	/**
+	 * 问题
+	 */
+	private String question;
 	
 	/**
 	 * 答案
 	 */
-	private AbstractOption answer;
+	private String answer;
 	
 	
 	
@@ -41,25 +46,35 @@ public class Case {
 
 
 
-	public void setOptions(ArrayList<AbstractOption> mOptions){
+	public void setOptions(ArrayList<String> mOptions){
 		this.options = mOptions;
 	}
 	
-	public void setAnswer(AbstractOption answer){
+	public void setAnswer(String answer){
 		this.answer = answer;
 	}
-	public ArrayList<AbstractOption> getOptions(){
+	public ArrayList<String> getOptions(){
 		return options;
 	}
-	public AbstractOption getAnswer(){
+	public String getAnswer(){
 		return answer;
 	}
 	
-	public boolean check(AbstractOption option){
-		if(answer.getId()==option.getId()){
-			return true;
-		}else{
-			return false;
-		}
+	
+	
+	public String getQuestion() {
+		return question;
+	}
+
+
+
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+
+
+
+	public boolean check(String option){
+		return answer.equals(option);
 	}
 }

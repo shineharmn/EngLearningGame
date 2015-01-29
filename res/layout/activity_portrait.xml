@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/portrait_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/portrait"
@@ -28,6 +29,7 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:background="#C0C0C0"
             android:layout_alignParentBottom="true"
             android:text="@string/cancel_portrait"
             android:layout_centerHorizontal="true"/>

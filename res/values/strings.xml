@@ -10,7 +10,8 @@
     <string name="login_status_logging_in">登录中&#8230;</string>
     <string name="login_account_hint">Email</string>
     <string name="login_register_link">没有账号？<a href="#" mce_href="#">注册</a></string>
-    <string name="main_startgame">经典模式</string>
+    <string name="main_startgame">经典游戏</string>
+    <string name="main_classicalmodel">跟读复读</string>
     <string name="main_logout">退出</string>
     <string name="main_lv">Lv0</string>
     <string name="main_saying_title">每日一句：</string>
@@ -38,4 +39,5 @@
 	<string name="return_menu">返回目录</string>
 	<string name="next">下一关</string>
 	<string name="restart">再来一次</string>
+	<string name="answer">answer</string>
 </resources>

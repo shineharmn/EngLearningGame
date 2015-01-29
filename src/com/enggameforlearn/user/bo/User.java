@@ -71,7 +71,9 @@ public class User implements Serializable{
 		return account;
 	}
 	
-
+	public void setAccount(String acc){
+		this.account = acc;
+	}
 
 	public String getPassword() {
 		return password;

@@ -7,8 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.enggameforlearn.game.bo.AbstractOption;
-import com.enggameforlearn.game.bo.WordOption;
 import com.enggameforlearn.user.bo.User;
 
 public class SQLiteUtil extends SQLiteOpenHelper {
@@ -17,34 +15,38 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	private static final String DB_NAME = "english.db"; // 数据库名称
 	private static final int version = 1; // 数据库版本
 	private static final String CASE_TABLE = "CREATE TABLE IF NOT EXISTS Cases (caseId integer primary key autoincrement," +
-			"option1 integer not null,option2 integer not null,option3 integer not null," +
-			"option4 integer not null,option5 integer not null,option6 integer not null," +
-			"option7 integer not null,option8 integer not null,option9 integer not null,answer integer not null)";	
+			"option1 varchar(10) ,option2 varchar(10) ,option3 varchar(10)," +
+			"option4 varchar(10) ,option5 varchar(10),option6 varchar(10) ," +
+			"option7 varchar(10) ,option8 varchar(10) ,option9 varchar(10) ,question varchar(50) not null,answer varchar(10) not null)";	
 	
-	private static final String OPTION_TABLE = "CREATE TABLE IF NOT EXISTS Option (optionId integer primary key autoincrement," +
-			"optionName varchar(20) not null,link varchar(60) not null)";
+//	private static final String OPTION_TABLE = "CREATE TABLE IF NOT EXISTS Option (optionId integer primary key autoincrement," +
+//			"optionName varchar(10) not null,link varchar(10) not null)";
 	
 	private static final String USER_TABLE = "CREATE TABLE IF NOT EXISTS User (account varchar(20) primary key,userName varchar(12),password varchar(10) not null)";
 	
 	private static final String LAST_RECORD_TABLE = "CREATE TABLE IF NOT EXISTS LastUnlock (account varchar(20) primary key,lastCaseId integer)";
 
+
+	
 	public SQLiteUtil(Context context) {
 		super(context, DB_NAME, null, version);
+		
+		
 		
 	}
 
 	/**
-	 * 获取某个id的答案
+	 * 获取某个题目id的问题
 	 * @param id
 	 * @return
 	 */
-	public synchronized AbstractOption getAnswer(int id) {
+	public synchronized String getAnswer(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor c = db.rawQuery("select * from Cases where caseId=?",
 				new String[] { String.valueOf(id) });
-		AbstractOption answer = new WordOption(-1, "", "");
+		String answer = "";
 		if (c.moveToFirst()) {
-			answer = findOption(c, "answer");
+			answer = c.getString(c.getColumnIndex("answer"));
 		}
 		c.close();
 		db.close();
@@ -52,18 +54,36 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * 获取某个id的选项
+	 * 获取某个题目id的问题
 	 * @param id
 	 * @return
 	 */
-	public synchronized ArrayList<AbstractOption> getOptions(int id){
+	public synchronized String getQuestion(int id){
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor c = db.rawQuery("select * from Cases where caseId=?",
 				new String[] { String.valueOf(id) });
-		ArrayList<AbstractOption> options = new ArrayList<AbstractOption>();
+		String question = "";
+		if (c.moveToFirst()) {
+			question = c.getString(c.getColumnIndex("question"));
+		}
+		c.close();
+		db.close();
+		return question;
+	}
+	
+	/**
+	 * 获取某个题目id的问题
+	 * @param id
+	 * @return
+	 */
+	public synchronized ArrayList<String> getOptions(int id){
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery("select * from Cases where caseId=?",
+				new String[] { String.valueOf(id) });
+		ArrayList<String> options = new ArrayList<String>();
 		if(c.moveToFirst()){
 			for(int i = 1;i<=9;i++){
-				options.add(findOption(c, "option"+i));
+				options.add(c.getString(c.getColumnIndex("option"+i)));
 			}
 		}
 		c.close();
@@ -93,8 +113,8 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	 * @param userName
 	 * @return
 	 */
-	public synchronized User getUser(String userName){
-		SQLiteDatabase db = this.getReadableDatabase();
+	public  synchronized User getUser(String userName){
+		SQLiteDatabase db = getReadableDatabase();
 		Cursor c = db.rawQuery("select * from User where account=?", new String[]{userName});
 		User user = null;
 		if(c.moveToFirst()){	
@@ -141,22 +161,24 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	
 	
 	
-	public AbstractOption findOption(Cursor c,String col){
-		SQLiteDatabase db = this.getReadableDatabase();
-		int id =  c.getInt(c.getColumnIndex(col));
-		AbstractOption answer = new WordOption(-1, "", "");
-		Cursor cursor = db.rawQuery("select * from Option where optionId=?",
-				new String[] { String.valueOf(id) });
-		if(cursor.moveToFirst()){
-			String optionName = cursor.getString(cursor
-					.getColumnIndex("optionName"));
-			String link = cursor.getString(cursor.getColumnIndex("link"));
-			answer = new WordOption(id, optionName, link);			
-		}
-		cursor.close();
-		db.close();
-		return answer;
-	}
+	
+	
+//	public AbstractOption findOption(Cursor c,String col){
+//		SQLiteDatabase db = this.getReadableDatabase();
+//		int id =  c.getInt(c.getColumnIndex(col));
+//		AbstractOption answer = new WordOption(-1, "", "");
+//		Cursor cursor = db.rawQuery("select * from Option where optionId=?",
+//				new String[] { String.valueOf(id) });
+//		if(cursor.moveToFirst()){
+//			String optionName = cursor.getString(cursor
+//					.getColumnIndex("optionName"));
+//			String link = cursor.getString(cursor.getColumnIndex("link"));
+//			answer = new WordOption(id, optionName, link);			
+//		}
+//		cursor.close();
+//		db.close();
+//		return answer;
+//	}
 
 	
 
@@ -164,9 +186,29 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		
 		db.execSQL(CASE_TABLE);
-		db.execSQL(OPTION_TABLE);
+	//	db.execSQL(OPTION_TABLE);
 		db.execSQL(USER_TABLE);
 		db.execSQL(LAST_RECORD_TABLE);
+		
+//		Properties options = OptionsUtil.getProperty();
+//		Iterator<Entry<Object, Object>> it = options.entrySet().iterator();
+//		while(it.hasNext()){
+//			Map.Entry<Object, Object> entry=(Map.Entry<Object, Object>)it.next();
+//			String optionName = ((String)entry.getKey()).substring(2);
+//			String link = (String)entry.getValue();						
+//			String sql = "insert into Option(optionName,link) values ('"+optionName+"','"+link+"')";
+//			db.execSQL(sql);
+//		}
+		String sql = "insert into Cases(option1,option2,option3,option4,option5,option6,option7,option8,option9,question,answer) values (" +
+				"'img_11','img_12','img_13','img_14','img_15','img_16','img_17','img_18','img_19','请找出以下不同的一项','teddy')";
+		String sql2 = "insert into Cases(option1,option2,option3,option4,option5,option6,option7,option8,option9,question,answer) values (" +
+				"'img_12','img_11','img_14','img_13','img_15','img_16','img_17','img_18','img_19','请找出以下重复的一项','pineapple')";
+		String sql3 = "insert into Cases(option1,option2,option3,option4,option5,option6,option7,option8,option9,question,answer) values (" +
+				"'img_12','img_14','img_11','img_13','img_16','img_15','img_18','img_17','img_19','请找出以下不同的两项','teddy pineapple')";
+		db.execSQL(sql);
+		db.execSQL(sql2);
+		db.execSQL(sql3);
+		
 		
 	}
 

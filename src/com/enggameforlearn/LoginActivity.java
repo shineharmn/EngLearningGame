@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -18,12 +19,14 @@ public class LoginActivity extends Activity{
 	EditText account_input;
 	EditText password_input;
 	UserService userService;
-	
+	SharedPreferences sp;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);		
 		userService = new UserServiceImpl(new SQLiteUtil(this));
+		sp = getSharedPreferences("userInfo", 0);
 		findViewById(R.id.register_text).setOnClickListener((View.OnClickListener) new RegisterListener());
 		findViewById(R.id.signin_button).setOnClickListener(new View.OnClickListener() {
 			
@@ -36,11 +39,13 @@ public class LoginActivity extends Activity{
 				if(userName!=""&&password!=""){								
 				User user = userService.login(userName, password);
 				if(user!=null){
-					Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-					Bundle bundle = new Bundle();
-					bundle.putSerializable("user", user);
-					intent.putExtras(bundle);
+					SharedPreferences.Editor editor =sp.edit();
+					editor.putString("USER_NAME", userName);
+					editor.putString("PASSWORD", password);
+					editor.commit();
+					Intent intent = new Intent(LoginActivity.this,MainActivity.class);	
 					startActivity(intent);
+					
 				}else{
 					showDialog("用户名或密码不正确");
 				}

@@ -23,13 +23,11 @@ public class GameServiceImpl implements GameService{
 	protected SQLiteUtil sqliteUtil;
 	 
 	
-	public GameServiceImpl(SQLiteUtil sqliteUtil){
+	public GameServiceImpl(SQLiteUtil sqliteUtil,IFactory factory){
 		this.sqliteUtil = sqliteUtil;
-	}
-	
-	public void setFactory(IFactory factory){
 		this.factory = factory;
 	}
+	
 	
 	@Override
 	public Case create(int id) {
@@ -38,6 +36,7 @@ public class GameServiceImpl implements GameService{
 			caseInstance.setCaseId(id);
 			caseInstance.setAnswer(sqliteUtil.getAnswer(id));	
 			caseInstance.setOptions(sqliteUtil.getOptions(id));
+			caseInstance.setQuestion(sqliteUtil.getQuestion(id));
 			return caseInstance;
 		}else{
 			return null;

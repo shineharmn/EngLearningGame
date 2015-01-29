@@ -2,6 +2,7 @@ package com.enggameforlearn;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -30,7 +31,8 @@ public class MainActivity extends Activity {
 	 */
 	private ImageView portrait;
 	
-	private TextView account;
+	
+	private TextView userName;
 	
 	UserService userService;
 	
@@ -38,27 +40,42 @@ public class MainActivity extends Activity {
 	
 	public static final int PORTRAIT = 1;
 	
+	SharedPreferences sp;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_main);
 		userService = new UserServiceImpl(new SQLiteUtil(this));
-		Intent intent = getIntent();
-		Bundle data = intent.getExtras();
-		user = (User)data.get("user");
+		sp = getSharedPreferences("userInfo",0);	
+		String account = sp.getString("USER_NAME", "");
+		String password = sp.getString("PASSWORD", "");
+		if(account==""){
+			Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+			startActivity(intent);
+			
+		}else{
+		//user = SingletonUser.getUser();
+		user = userService.login(account, password);
 		
-		account =(TextView)findViewById(R.id.main_account);
-		account.setText(user.getAccount());
+		userName =(TextView)findViewById(R.id.main_account);
+		userName.setText(user.getUsername());
 		portrait = (ImageView)findViewById(R.id.portrait);
 		Button logout = (Button)findViewById(R.id.main_logout);
-	    Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.portrait);
+		Button classicalModel = (Button)findViewById(R.id.button_startgame);
+		TextView level = (TextView)findViewById(R.id.main_lv);
+		level.setText("Lv"+user.getUnLockCases().size());
+		Bitmap bitmap = BitmapFactory.decodeFile("image/outputFormat.JPEG");
+		if(bitmap==null){
+			 bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.portrait);
+		}    
 		Bitmap result = ScalePortrait.scaleRoundPortrait(bitmap);
 		portrait.setImageBitmap(result);	
 		portrait.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				startActivityForResult(new Intent(MainActivity.INTENT_PORTRAIT), PORTRAIT);			
+				startActivity(new Intent(MainActivity.this,PortraitActivity.class));			
 			}
 		});
 		
@@ -67,12 +84,31 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				userService.logout(user);
+				SharedPreferences.Editor editor =sp.edit();
+				editor.putString("USER_NAME", "");
+				editor.putString("PASSWORD", "");
+				editor.commit();
 				Intent intent = new Intent(MainActivity.this,LoginActivity.class);
 				startActivity(intent);
 								
 				
 			}
 		});
+		
+		classicalModel.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this,ReadyGameActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("user", user);
+				intent.putExtras(bundle);
+				startActivity(intent);
+				
+			}
+		});
+		
+		}
 		
 	}
 
@@ -95,15 +131,5 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		switch (requestCode) {
-		case PORTRAIT:
-			
-			break;
 
-		default:
-			break;
-		}
-	}
 }

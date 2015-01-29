@@ -9,6 +9,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
 public class ScalePortrait {
+	
+	protected int ii = 1;
 
 	public static Bitmap scaleRoundPortrait(Bitmap bitmap){
 		if(bitmap!=null){	

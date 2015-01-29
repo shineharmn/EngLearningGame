@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -17,11 +18,15 @@ public class RegisterActivity extends Activity{
 
 	
 	UserService userService;
+	
+	SharedPreferences sp;
+	
 	@Override
 	protected void  onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);	
 		userService = new UserServiceImpl(new SQLiteUtil(this));
+		sp = getSharedPreferences("userInfo", 0);
 		findViewById(R.id.register_button).setOnClickListener(new RegisterListener());
 		findViewById(R.id.register_account_edit).setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			
@@ -50,15 +55,27 @@ public class RegisterActivity extends Activity{
 		public void onClick(View v) {
 			String account = ((EditText)findViewById(R.id.register_account_edit)).getText().toString();
 			String password = ((EditText)findViewById(R.id.register_password_edit)).getText().toString();
+			String conform = ((EditText)findViewById(R.id.register_conform_edit)).getText().toString();
 			String userName = ((EditText)findViewById(R.id.register_name_edit)).getText().toString();
-			User user = userService.register(account, userName, password);
-			if(user==null){
-				showDialog("该账号已被注册");
-			}else{
-				showDialog("注册成功",user);
-
+			if(conform.equals(password)){
+				User user = userService.register(account, userName, password);
 				
+				if(user==null){
+					showDialog("该账号已被注册");
+				}else{
+					
+					SharedPreferences.Editor editor =sp.edit();
+					editor.putString("USER_NAME", account);
+					editor.putString("PASSWORD", password);
+					editor.commit();
+					showDialog("注册成功",user);
+					
+					
+				}
+			}else{
+				showDialog("两次输入的密码不一致");
 			}
+			
 			
 		}
 		
@@ -85,10 +102,7 @@ public class RegisterActivity extends Activity{
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();	
-				Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("user", user);
-				intent.putExtras(bundle);
+				Intent intent = new Intent(RegisterActivity.this,MainActivity.class);		
 				startActivity(intent);
 			}
 		});

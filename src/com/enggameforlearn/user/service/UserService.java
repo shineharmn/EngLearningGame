@@ -11,4 +11,6 @@ public interface UserService {
 	boolean isRegister(String account);
 	
 	void logout(User user);
+	
+	User getUser(String account);
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.enggameforlearn.user.bo.User;
 import com.enggameforlearn.user.service.UserService;
 import com.enggameforlearn.util.SQLiteUtil;
+import com.enggameforlearn.util.SingletonUser;
 
 public class UserServiceImpl implements UserService{
 
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService{
 		User user = sqlUitl.getUser(userName);
 		if(user!=null&&user.checkPassword(password)){
 			this.setLockStatus(user);
+			SingletonUser.setUser(user);
 		}		
 		return user;
 	}
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService{
 			user.setPassword(password);
 			user.setLockCases(cases);
 			sqlUitl.addUser(user);
+			SingletonUser.setUser(user);
 			return user;
 		}else{
 			return null;
@@ -64,6 +67,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public boolean isRegister(String account) {
 		return sqlUitl.getUser(account)!=null;
+	}
+	@Override
+	public User getUser(String account) {
+		return	sqlUitl.getUser(account);
+		 
 	}
 
 
