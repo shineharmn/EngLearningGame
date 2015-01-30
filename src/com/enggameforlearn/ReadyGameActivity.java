@@ -6,6 +6,7 @@ import com.enggameforlearn.util.SingletonUser;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,15 +23,16 @@ public class ReadyGameActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_readygame);
-		ApplicationInfo appInfo = getApplicationInfo();
-	
-		user = SingletonUser.getUser();
-		
+		ApplicationInfo appInfo = getApplicationInfo();	
+		user = SingletonUser.getUser();		
 		for(int i = 1;i<=10;i++){
 			
 			Button button = (Button)findViewById(getResources().getIdentifier("mission_"+i, "id", appInfo.packageName));
 			if(user.isLock(i-1)){
-			button.setOnClickListener(new StartListener(i));
+				button.setOnClickListener(new StartListener(i));
+				button.setTextColor(getResources().getColor(R.drawable.lightgreen));
+			}else{
+				button.setTextColor(Color.GRAY);
 			}
 		}
 		

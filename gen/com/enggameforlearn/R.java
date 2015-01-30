@@ -38,6 +38,7 @@ public final class R {
         public static final int img_17=0x7f02000d;
         public static final int img_18=0x7f02000e;
         public static final int img_19=0x7f02000f;
+        public static final int lightgreen=0x7f020013;
         public static final int portrait=0x7f020010;
         public static final int portrait_bg=0x7f020011;
         public static final int readygame=0x7f020012;
