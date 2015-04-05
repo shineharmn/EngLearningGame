@@ -1,11 +1,20 @@
 package com.enggameforlearn;
 
+import java.io.IOException;
+
+import org.apache.commons.httpclient.HttpException;
+
 import com.enggameforlearn.user.bo.User;
+import com.enggameforlearn.user.service.UserService;
+import com.enggameforlearn.user.service.impl.UserServiceImpl;
+import com.enggameforlearn.util.SQLiteUtil;
 import com.enggameforlearn.util.SingletonUser;
+import com.enggameforlearn.web.ConnectFailDialog;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,6 +30,8 @@ public class GameResultActivity extends Activity{
 	 */
 	private User user;
 	
+	private UserService userService;
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_result);
@@ -28,8 +39,16 @@ public class GameResultActivity extends Activity{
 		Intent intent = getIntent();
 		
 		user = SingletonUser.getUser();
-		playingGameNum = intent.getIntExtra("case", 0);
+		playingGameNum = intent.getIntExtra("case", 1);
+		userService = new UserServiceImpl(new SQLiteUtil(this));
 		user.unLock(playingGameNum+1);
+		try {
+			userService.updateLastUnlock(user, user.getUnLockCases().get(user.getUnLockCases().size()-1));
+		} catch (HttpException e) {
+			ConnectFailDialog.showDialog(GameResultActivity.this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Button menu = (Button)findViewById(R.id.menu);
 		Button next = (Button)findViewById(R.id.next);
 		
@@ -53,6 +72,15 @@ public class GameResultActivity extends Activity{
 				
 			}
 		});
+	}
+	
+	@Override    
+	public boolean onKeyDown(int keyCode, KeyEvent event) {  
+	if(keyCode == KeyEvent.KEYCODE_BACK){      
+	return  true;
+	}  
+	return  super.onKeyDown(keyCode, event);     
+
 	}
 	
 }

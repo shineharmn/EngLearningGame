@@ -13,16 +13,16 @@ public class ScalePortrait {
 	protected int ii = 1;
 
 	public static Bitmap scaleRoundPortrait(Bitmap bitmap){
-		if(bitmap!=null){	
-		Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+		if(bitmap!=null){
+			
+		Bitmap result = Bitmap.createBitmap(100, 100, Config.ARGB_8888);
 		Canvas canvas = new Canvas(result);
 		Paint paint = new Paint();
-		Rect rect = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
+		Rect rect = new Rect(0,0,100,100);
 		paint.setAntiAlias(true);
 		paint.setFilterBitmap(true);
 		paint.setDither(true);
-	//	canvas.drawARGB(0, 0, 0, 0);	
-		canvas.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
+		canvas.drawCircle(100/2, 100/2, 100/2, paint);
 		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
 		canvas.drawBitmap(bitmap, null,rect, paint);	
 		return result;

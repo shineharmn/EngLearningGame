@@ -22,17 +22,16 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 //	private static final String OPTION_TABLE = "CREATE TABLE IF NOT EXISTS Option (optionId integer primary key autoincrement," +
 //			"optionName varchar(10) not null,link varchar(10) not null)";
 	
-	private static final String USER_TABLE = "CREATE TABLE IF NOT EXISTS User (account varchar(20) primary key,userName varchar(12),password varchar(10) not null)";
+	private static final String USER_TABLE = "CREATE TABLE IF NOT EXISTS User (username varchar(20) primary key,nickname varchar(12),password varchar(10) not null)";
 	
-	private static final String LAST_RECORD_TABLE = "CREATE TABLE IF NOT EXISTS LastUnlock (account varchar(20) primary key,lastCaseId integer)";
+	private static final String LAST_RECORD_TABLE = "CREATE TABLE IF NOT EXISTS LastUnlock (username varchar(20) primary key,lastUnlock integer)";
 
 
 	
 	public SQLiteUtil(Context context) {
 		super(context, DB_NAME, null, version);
 		
-		
-		
+	
 	}
 
 	/**
@@ -115,12 +114,12 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	 */
 	public  synchronized User getUser(String userName){
 		SQLiteDatabase db = getReadableDatabase();
-		Cursor c = db.rawQuery("select * from User where account=?", new String[]{userName});
+		Cursor c = db.rawQuery("select * from User where username=?", new String[]{userName});
 		User user = null;
 		if(c.moveToFirst()){	
 		
 			user = new User(userName);	
-			user.setUsername(c.getString(c.getColumnIndex("userName")));
+			user.setNickname(c.getString(c.getColumnIndex("nickname")));
 			user.setPassword((c.getString(c.getColumnIndex("password"))));
 		
 		}
@@ -136,10 +135,10 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	 */
 	public synchronized Integer getLastUnlock(String userName){
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor c = db.rawQuery("select * from LastUnlock where account=?", new String[]{userName});
-		int id = 0;
+		Cursor c = db.rawQuery("select * from LastUnlock where username=?", new String[]{userName});
+		int id = 1;
 		if(c.moveToFirst()){	
-			id = c.getInt(c.getColumnIndex("lastCaseId"));		
+			id = c.getInt(c.getColumnIndex("lastUnlock"));		
 		}
 		c.close();
 		db.close();
@@ -147,13 +146,17 @@ public class SQLiteUtil extends SQLiteOpenHelper {
 	} 
 	
 	public synchronized void updateUnlock(User user,int unlock){
+		SQLiteDatabase db = this.getReadableDatabase();
+		String sql = "update LastUnlock set lastUnlock='"+unlock+"' where username='"+user.getUsername()+"'";
+		db.execSQL(sql);
+		db.close();
 		
 	}
 	
 	public synchronized void addUser(User obj){
 		SQLiteDatabase db = this.getReadableDatabase();
-		String sql = "insert into LastUnlock(account,lastCaseId) values ('"+obj.getAccount()+"',"+0+") ";
-		String add = "insert into User(account,userName,password) values ('"+obj.getAccount()+"','"+obj.getUsername()+"','"+obj.getPassword()+"') ";
+		String sql = "insert into LastUnlock(username,lastUnlock) values ('"+obj.getUsername()+"',"+1+") ";
+		String add = "insert into User(username,nickname,password) values ('"+obj.getUsername()+"','"+obj.getNickname()+"','"+obj.getPassword()+"') ";
 		db.execSQL(add);
 		db.execSQL(sql);
 		db.close();

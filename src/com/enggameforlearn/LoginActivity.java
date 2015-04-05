@@ -1,11 +1,16 @@
 package com.enggameforlearn;
 
+import java.io.IOException;
+
+import org.apache.commons.httpclient.HttpException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,6 +18,7 @@ import com.enggameforlearn.user.bo.User;
 import com.enggameforlearn.user.service.UserService;
 import com.enggameforlearn.user.service.impl.UserServiceImpl;
 import com.enggameforlearn.util.SQLiteUtil;
+import com.enggameforlearn.web.ConnectFailDialog;
 
 public class LoginActivity extends Activity{
 
@@ -37,7 +43,14 @@ public class LoginActivity extends Activity{
 				String userName = account_input.getText().toString();
 				String password = password_input.getText().toString();
 				if(userName!=""&&password!=""){								
-				User user = userService.login(userName, password);
+					User user = null;;
+					try {
+						user = userService.login(userName, password);
+					} catch (HttpException e) {					
+						ConnectFailDialog.showDialog(LoginActivity.this);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				if(user!=null){
 					SharedPreferences.Editor editor =sp.edit();
 					editor.putString("USER_NAME", userName);
@@ -81,5 +94,14 @@ public class LoginActivity extends Activity{
 			
 		}
 		
+	}
+	
+	@Override    
+	public boolean onKeyDown(int keyCode, KeyEvent event) {  
+	if(keyCode == KeyEvent.KEYCODE_BACK){      
+	return  true;
+	}  
+	return  super.onKeyDown(keyCode, event);     
+
 	}
 }

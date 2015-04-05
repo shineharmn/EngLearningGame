@@ -1,28 +1,43 @@
 package com.enggameforlearn;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import org.apache.commons.httpclient.HttpException;
+
+import com.enggameforlearn.util.SingletonUser;
+import com.enggameforlearn.web.ConnectFailDialog;
+import com.enggameforlearn.web.PortraitConnection;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 /***
  * 把图片截取为50x50
  * @author harmn
  *
  */
+@SuppressLint("NewApi")
 public class PortraitActivity extends Activity{
 
 	private static final int RETERN_VALUE = 2;
 	
 	private static final int CROP_PIC = 3;
+	
+	LinearLayout bg;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -30,6 +45,7 @@ public class PortraitActivity extends Activity{
 		setContentView(R.layout.activity_portrait);
 		Button select = (Button)findViewById(R.id.button_select);
 		Button cancel = (Button)findViewById(R.id.button_cancel);
+		bg = (LinearLayout)findViewById(R.id.portrait_bg);
 		select.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -52,6 +68,8 @@ public class PortraitActivity extends Activity{
 		
 	}
 	
+	@SuppressLint("NewApi")
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		
@@ -71,13 +89,19 @@ public class PortraitActivity extends Activity{
 		    Uri photoUri = data.getData();  
 		    if (photoUri != null) {  
 		         photo = BitmapFactory.decodeFile(photoUri.getPath());  
+		      //   bg.setBackground(background)(R.id.portrait);
+		         bg.setBackgroundResource(R.drawable.portrait);
 		    }
 		    if (photo == null) {  
 		        Bundle extra = data.getExtras();  
 		        if (extra != null) {  
 		             photo = (Bitmap)extra.get("data");    
-		             ByteArrayOutputStream stream = new ByteArrayOutputStream();    
-		             photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);  
+
+		             bg.setBackground(new BitmapDrawable(photo));
+
+		             MainActivity.flag = true;
+		             saveToSDCard("portrait",photo);
+		             
 		        }else{
 		        	photo = BitmapFactory.decodeResource(this.getResources(),R.drawable.portrait);
 		        }    
@@ -107,6 +131,41 @@ public class PortraitActivity extends Activity{
         intent.putExtra("noFaceDetection", true);  
         intent.putExtra("return-data", true);    
         startActivityForResult(intent, requestCode);
+	}
+	
+	private void saveToSDCard(String name,Bitmap bitmap){
+		File f = new File(Environment.getExternalStorageDirectory().toString()+
+				   File.separator +"englearning");
+		 FileOutputStream fOut = null;
+		 File photo;
+		 try {  
+			 if(!f.exists()){
+				 f.mkdir();
+			 }
+			 photo = new File(f.getAbsoluteFile(),SingletonUser.getUser().getUsername()+"_portrait.JPEG");
+			 if(!photo.exists()){
+				 photo.createNewFile();
+			 }
+             fOut = new FileOutputStream(photo);  
+             PortraitConnection.upload(photo);
+     } catch (HttpException ex) {
+ 		ConnectFailDialog.showDialog(PortraitActivity.this);
+ 	} catch (IOException e) {  
+            e.printStackTrace();  
+     } 
+		
+			
+		
+		 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+		 
+		 try {
+			fOut.flush();
+			fOut.close();
+		} catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

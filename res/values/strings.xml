@@ -40,4 +40,6 @@
 	<string name="next">下一关</string>
 	<string name="restart">再来一次</string>
 	<string name="answer">answer</string>
+	<string name="_sdcard_englearngameportrait_">/sdcard/EngLearnGamePortrait</string>
+	<string name="voice">https://play.google.com/store/apps/details?id=com.google.android.voicesearch.x</string>
 </resources>

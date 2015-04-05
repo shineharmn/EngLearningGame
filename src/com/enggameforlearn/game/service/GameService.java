@@ -18,4 +18,6 @@ public interface GameService {
 	 * @return
 	 */
 	ArrayList<Integer> show();
+
+	
 }

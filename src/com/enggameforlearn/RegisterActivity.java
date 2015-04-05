@@ -58,12 +58,16 @@ public class RegisterActivity extends Activity{
 			String conform = ((EditText)findViewById(R.id.register_conform_edit)).getText().toString();
 			String userName = ((EditText)findViewById(R.id.register_name_edit)).getText().toString();
 			if(conform.equals(password)){
-				User user = userService.register(account, userName, password);
+				User user = null;
+				try {
+					user = userService.register(account, userName, password);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				
 				if(user==null){
 					showDialog("该账号已被注册");
-				}else{
-					
+				}else{					
 					SharedPreferences.Editor editor =sp.edit();
 					editor.putString("USER_NAME", account);
 					editor.putString("PASSWORD", password);

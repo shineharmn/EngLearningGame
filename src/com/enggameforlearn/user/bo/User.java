@@ -20,7 +20,7 @@ public class User implements Serializable{
 	/**
 	 * 账号
 	 */
-	private String account;
+	private String username;
 	
 	/**
 	 * 密码
@@ -30,7 +30,7 @@ public class User implements Serializable{
 	/**
 	 * 用户名
 	 */
-	private String username;
+	private String nickname;
 	
 	/**
 	 * 保存的是已经解锁了的关卡的id
@@ -39,7 +39,7 @@ public class User implements Serializable{
 	
 	public User(String name){
 	
-		account = name;
+		username = name;
 		
 		
 	}
@@ -67,20 +67,20 @@ public class User implements Serializable{
 		return password.equals(pwd);
 	}
 
-	public String getAccount() {
-		return account;
+	public String getUsername() {
+		return username;
 	}
 	
-	public void setAccount(String acc){
-		this.account = acc;
+	public void setUsername(String acc){
+		this.username = acc;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getNickname() {
+		return nickname;
 	}
 
 	public void setLockCases(List<Integer> lockCases) {
@@ -94,8 +94,8 @@ public class User implements Serializable{
 	public void setPassword(String password){
 		this.password = password;
 	}
-	public void setUsername(String username){
-		this.username = username;
+	public void setNickname(String username){
+		this.nickname = username;
 	}
 	
 	
