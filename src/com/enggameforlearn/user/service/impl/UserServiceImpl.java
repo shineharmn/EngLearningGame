@@ -13,6 +13,7 @@ import com.enggameforlearn.user.service.UserService;
 import com.enggameforlearn.util.SQLiteUtil;
 import com.enggameforlearn.util.SingletonUser;
 import com.enggameforlearn.web.CasesConnection;
+import com.enggameforlearn.web.HttpConnectInstance;
 import com.enggameforlearn.web.LoginConnection;
 import com.enggameforlearn.web.RegisterConnection;
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService{
 	public UserServiceImpl(SQLiteUtil sql){
 		sqlUitl = sql;
 	}
+	
 	@Override
 	public User login(String userName, String password) throws HttpException, IOException {	
 //		User user = sqlUitl.getUser(userName);
@@ -73,6 +75,7 @@ public class UserServiceImpl implements UserService{
 		int lastUnlock = user.getUnLockCases().get(size-1);
 		sqlUitl.updateUnlock(user, lastUnlock);		
 		sqlUitl.close();
+		HttpConnectInstance.getInstance().getHttpConnectionManager().closeIdleConnections(0);
 		
 	}
 	
@@ -101,6 +104,7 @@ public class UserServiceImpl implements UserService{
 		return	sqlUitl.getUser(account);
 		 
 	}
+	
 	@Override
 	public void updateLastUnlock(User user, int unlock) throws HttpException, IOException {
 		sqlUitl.updateUnlock(user, unlock);

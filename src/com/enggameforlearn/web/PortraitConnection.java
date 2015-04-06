@@ -54,7 +54,6 @@ public class PortraitConnection {
 	 * @throws HttpException 
 	 */
 	public static void upload(File file) throws HttpException, IOException { 
-		
 		String url = "http://127.0.0.1:8080/engspeaker/user.do?method=portrait";
 		PostMethod post = new PostMethod(url);
 		Part[] parts = {new FilePart(file.getName(), file)};
@@ -63,6 +62,11 @@ public class PortraitConnection {
 		HttpConnectInstance.getInstance().getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		
 		 HttpConnectInstance.getInstance().executeMethod(post);
+
 	}
+	
+
+	
+	
 	
 }
